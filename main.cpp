@@ -80,6 +80,8 @@ const string COLOR_RESET = "\033[0m", BRIGHT_GREEN = "\033[1;32m", BRIGHT_RED = 
 #define bench(x) 0
 #endif
 
-int main() {
-    
+int main(int argc, char *argv[]) {
+    if (argc >= 2) {
+        // X = std::stoi(argv[1]);
+    }
 }
