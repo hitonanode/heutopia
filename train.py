@@ -24,7 +24,7 @@ def objective(trial: optuna.trial.Trial):
     params = (str(x),)
 
     input_fns = sorted(os.listdir(constants.DATASET_DIR))[:NUM_CASES_LIMIT]
-    pool = multiprocessing.Pool(processes=constants.NUM_PROCESS)
+    pool = multiprocessing.get_context("fork").Pool(processes=constants.NUM_PROCESS)
 
     for infile in input_fns:
         pool.apply_async(external_solver.run, args=(output_dirname, infile, params))

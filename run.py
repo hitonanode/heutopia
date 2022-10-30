@@ -47,7 +47,7 @@ if __name__ == "__main__":
     pool.join()
 
     end_time = time.perf_counter()
-    avg_score = sum(return_dict.values()) / len(return_dict.values())
+    avg_score: float = sum(return_dict.values()) / len(return_dict.values())  # type: ignore
 
     print("Length: {}".format(len(return_dict)))
     print("Score average: {}".format(avg_score))

@@ -3,6 +3,7 @@ solver.out: main.cpp
 
 format:
 	poetry run black .
+	poetry run flake8 .
 	poetry run mypy .
 
 run:
