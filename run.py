@@ -11,9 +11,6 @@ import subprocess
 import constants
 import external_solver
 
-manager = multiprocessing.Manager()
-return_dict = manager.dict()
-
 NUM_CASE_LIMIT = 512
 
 
@@ -24,9 +21,11 @@ def wrapper(output_dirname: str, infile: str, params):
 
 
 if __name__ == "__main__":
+    manager = multiprocessing.Manager()
+    return_dict = manager.dict()
 
     start_time = time.perf_counter()
-    pool = multiprocessing.Pool(processes=constants.NUM_PROCESS)
+    pool = multiprocessing.get_context("fork").Pool(processes=constants.NUM_PROCESS)
 
     output_dirname = "result{}_{}".format(
         datetime.datetime.now().strftime("%H%M%S"),
