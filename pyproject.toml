@@ -1,22 +1,25 @@
 [tool.poetry]
 name = "ahc-template"
-version = "0.2.0"
+version = "0.3.0"
 description = ""
 authors = ["hitonanode <32937551+hitonanode@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-numpy = "^1.23.4"
-scipy = "^1.8.0"
-matplotlib = "^3.6.1"
+numpy = "^1.24.2"
+matplotlib = "^3.6.3"
+pandas = "^1.5.3"
+openpyxl = "^3.1.0"
+pyyaml = "^6.0"
 online-judge-tools = "^11.5.1"
-optuna = "^3.0.3"
+optuna = "^3.1.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.10.0"
-mypy = "^0.981"
+black = "^22.12.0"
+mypy = "^1.0.0"
 flake8 = "^5.0.4"
-flake8-bugbear = "^22.10.27"
+flake8-bugbear = "^22.12.6"
+types-pyyaml = "^6.0.12.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

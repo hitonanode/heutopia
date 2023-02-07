@@ -1,7 +1,9 @@
-solver.out: main.cpp
+.PHONY: build pyformat run train clean
+
+build: main.cpp
 	g++-11 -Wfatal-errors -Wall -Wextra -g -O2 -fsanitize=undefined -std=c++17 -DHITONANODE_LOCAL -DBENCHMARK -fsplit-stack main.cpp -o solver.out
 
-format:
+pyformat:
 	poetry run black .
 	poetry run flake8 .
 	poetry run mypy .
