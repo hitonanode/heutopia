@@ -1,38 +1,32 @@
+import json
 import os
 import subprocess
-
-import constants
-
-
-def evaluate(ret: str) -> float:
-    return float(ret.split()[0])
+from typing import Optional, Union
 
 
-def run(output_dir: str, fn: str, params=tuple()) -> str:
-    ret_file_path = os.path.join(output_dir, fn)
-    with open(os.devnull, "w") as devnull:
-        subprocess.check_output(
-            'cat {}/{} | {}/solver.out {} > "{}"'.format(
-                constants.DATASET_DIR,
-                fn,
-                output_dir,
-                " ".join(map(str, params)),
-                ret_file_path,
-            ),
-            shell=True,
-            stderr=devnull,
-        )
+def run(
+    solver_abs_path: str,
+    input_dir_abs_path: str,
+    input_filename: str,
+    solver_args: Optional[list[Union[str, float, int]]],
+    show_detail: bool,
+) -> dict[str, Union[str, float, int]]:
 
-    ret = load_result(output_dir, fn)
-    return ret
+    comm = "cat {} | {} {}".format(
+        os.path.join(input_dir_abs_path, input_filename),
+        solver_abs_path,
+        " ".join([str(arg) for arg in solver_args]) if solver_args else "",
+    )
+    process = subprocess.run(
+        comm, shell=True, check=False, capture_output=True, text=True
+    )
+    if process.returncode:
+        print("Error: {}".format(input_filename))
 
+    ret: dict[str, Union[str, float, int]] = {"input_filename": input_filename}
+    ret |= json.loads(process.stdout)
 
-def load_result(output_dir: str, fn: str) -> str:
-    """Parse dumped text file"""
-    ret_file_path = os.path.join(output_dir, fn)
-    with open(os.devnull, "w") as devnull:
-        res = subprocess.check_output(
-            'cat "{}"'.format(ret_file_path), shell=True, stderr=devnull
-        )
-    ret = res.decode("utf-8")
+    if show_detail:
+        print("Run {}: {}".format(input_filename, ret))
+
     return ret

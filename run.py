@@ -1,58 +1,101 @@
-#!/usr/bin/env python3
 import datetime
 import shutil
 import os
+import pathlib
 import random
 import string
 import time
 import multiprocessing
+from multiprocessing.pool import AsyncResult
 import subprocess
 
-import constants
+import pandas as pd  # type: ignore
+import yaml
+
 import external_solver
-
-NUM_CASE_LIMIT = 512
-
-
-def wrapper(output_dirname: str, infile: str, params):
-    ret = external_solver.run(output_dirname, infile, params)
-    print("Run {} as params={}: {}".format(infile, params, ret.split()[:1]))  # Modify
-    return_dict[infile] = external_solver.evaluate(ret)
 
 
 if __name__ == "__main__":
-    manager = multiprocessing.Manager()
-    return_dict = manager.dict()
+
+    with open("config.yaml", "r") as f:
+        config = yaml.safe_load(f)
+    print(config)
 
     start_time = time.perf_counter()
-    pool = multiprocessing.get_context("fork").Pool(processes=constants.NUM_PROCESS)
+    pool = multiprocessing.get_context("fork").Pool(processes=config["num_process"])
+    num_case_limit = config["num_case_limit"]
 
     output_dirname = "result{}_{}".format(
-        datetime.datetime.now().strftime("%H%M%S"),
+        datetime.datetime.now().strftime("%y%m%d%H%M%S"),
         "".join(random.choice(string.ascii_lowercase) for _ in range(4)),
     )
 
     os.makedirs(output_dirname)
-    shutil.copy2("./main.cpp", os.path.join(output_dirname, "main.cpp.old"))
+    subprocess.check_output(
+        "poetry run python3 expander.py main.cpp -c > {}".format(
+            os.path.join(output_dirname, "main.cpp.old")
+        ),
+        shell=True,
+    )
     subprocess.check_output("make", shell=True)
-    shutil.copy2("./solver.out", os.path.join(output_dirname, "solver.out"))
+    solver_path = str(
+        pathlib.Path(os.path.join(output_dirname, "solver.out")).resolve()
+    )
+    shutil.copy2("./solver.out", solver_path)
+    print(config["dataset_dir"])
+    input_filesinfo: list[tuple[str, str]] = list()
 
-    input_fns = sorted(os.listdir(constants.DATASET_DIR))[:NUM_CASE_LIMIT]
-    print("Input: {}".format(input_fns))
+    def choose_file(s: str) -> bool:
+        # if s[-3:] != ".in":
+        #     return False
 
-    for infile in input_fns:
-        pool.apply_async(wrapper, args=(output_dirname, infile, tuple()))
+        # if Parameter.parse_str(s[:-3]).idx != 1:
+        #     return False
 
+        return True
+
+    for root, _, files in os.walk(config["dataset_dir"]):
+        input_filesinfo.extend([(root, f) for f in files if choose_file(f)])
+
+    input_filesinfo = sorted(input_filesinfo)[: config["num_case_limit"]]
+
+    print("Input: {} ({} cases)".format(input_filesinfo, len(input_filesinfo)))
+
+    process_list: list[tuple[str, AsyncResult]] = [
+        (
+            input_filename,
+            pool.apply_async(
+                external_solver.run,
+                args=(solver_path, input_filedir, input_filename, None, True),
+            ),
+        )
+        for input_filedir, input_filename in input_filesinfo
+    ]
     pool.close()
     pool.join()
 
     end_time = time.perf_counter()
-    avg_score: float = sum(return_dict.values()) / len(return_dict.values())  # type: ignore
 
-    print("Length: {}".format(len(return_dict)))
-    print("Score average: {}".format(avg_score))
-    print("Expected score: {}".format(avg_score * constants.SCOREBOARD_TESTCASES))
+    return_list = [(name, x.get()) for (name, x) in process_list if x.successful()]
+    return_list.sort()
+    df = pd.DataFrame([x for _, x in return_list])
+
+    mean_df = df.mean().round(4)
+    min_df = df.min()
+    max_df = df.max()
+    mean_df["input_filename"] = "mean"
+    min_df["input_filename"] = "min"
+    max_df["input_filename"] = "max"
+
+    df_to_save = pd.concat([df, pd.DataFrame([mean_df, min_df, max_df])])
+    df_to_save.to_csv(os.path.join(output_dirname, "summary.csv"), index=False)
+    df_to_save.to_excel(os.path.join(output_dirname, "summary.xlsx"), index=False)
+
+    print(mean_df.to_json(indent=4))
+
+    print("Length: {} / {}".format(len(return_list), len(process_list)))
     print("Elapsed time: {} sec.".format(end_time - start_time))
 
-    lst = sorted([(score, name) for name, score in return_dict.items()])
-    print("Worst cases: {}".format(lst[:10]))
+    for column in config["print_columns"]:
+        lst = sorted([(x[column], name) for name, x in return_list])
+        print("Worst cases by {}: {}".format(column, lst[:10]))
