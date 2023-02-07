@@ -18,7 +18,9 @@ class JsonDumper {
 public:
     JsonDumper(bool dump_at_end_ = false) : dump_at_end(dump_at_end_) {}
 
-    ~JsonDumper() { if (dump_at_end) std::cout << dump() << std::endl; }
+    ~JsonDumper() {
+        if (dump_at_end) std::cout << dump() << std::endl;
+    }
 
     void set_dump_at_end() { dump_at_end = true; }
 

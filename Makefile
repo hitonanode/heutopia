@@ -1,7 +1,10 @@
-.PHONY: build pyformat run train clean
+.PHONY: build format pyformat run train clean
 
 build: main.cpp
 	g++-11 -Wfatal-errors -Wall -Wextra -g -O2 -fsanitize=undefined -std=c++17 -DHITONANODE_LOCAL -DBENCHMARK -fsplit-stack main.cpp -o solver.out
+
+format:
+	find ./ -name "*.hpp" -o -name "*.cpp" | xargs clang-format --Werror -i -style=file
 
 pyformat:
 	poetry run black .
