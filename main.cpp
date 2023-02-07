@@ -1,3 +1,5 @@
+#include "common.hpp"
+
 #include <algorithm>
 #include <array>
 #include <bitset>
@@ -88,20 +90,19 @@ const string COLOR_RESET = "\033[0m", BRIGHT_GREEN = "\033[1;32m", BRIGHT_RED = 
 #define dbg(x) 0
 #define dbgif(cond, x) 0
 #endif
-#ifdef BENCHMARK
-#define bench(x) (cout << (x) << endl)
-#define dump_onlinejudge(x) 0
-#else
-#define dump_onlinejudge(x) (cout << (x) << endl)
-#define bench(x) 0
-#endif
 
 
 int main(int argc, char *argv[]) {
+    int X = 0;
     if (argc >= 2) {
-        // X = std::stoi(argv[1]);
+        X = std::stoi(argv[1]);
     }
+
     int x;
     cin >> x;
-    cout << x << endl;
+    jdump("stdin", x);
+
+    dump_onlinejudge("solution"s);
+
+    jdump("score", -(X - 6) * (X - 6));
 }
