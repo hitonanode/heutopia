@@ -8,23 +8,18 @@
 ./
 ├── Makefile
 ├── README.md
-├── main.cpp             # AtCoder 提出用 C++ 実装コード、`-DBENCHMARK` つきでコンパイルするとスコアを最初に標準出力する
-├── constants.py
+├── common.hpp
+├── config.yaml
+├── expander.py
 ├── external_solver.py
+├── json_dumper.hpp
+├── main.cpp
+├── poetry.lock
+├── pyproject.toml
 ├── run.py
-├── train.py
-├── inputs
-│   ├── 0000.txt
-│   ├── 0001.txt
-│   ├── ...
-├── resultHHMMSS_****
-│   ├── 0000.txt
-│   ├── 0001.txt
-│   ├── ...
-└── trainHHMMSS_****
-    ├── 0000.txt
-    ├── 0001.txt
-    ├── ...
+├── sample_input
+│   └── 0001.in
+└── train.py
 ```
 
 ## はじめにやること
@@ -32,16 +27,15 @@
 ### パッケージのインストール
 
 ```bash
-pyenv install 3.10.2
-pyenv local 3.10.2
+pyenv install 3.10.9
+pyenv local 3.10.9
+poetry env use 3.10.9
 poetry install
 ```
 
 ### システムパラメータの設定
 
-- `constants.py` を開き、全てのパラメータを適切な値に設定し直す。
-- `run.py` を開き、`NUM_CASE_LIMIT` の値を設定し直す。
-- （ハイパーパラメータ学習を行う場合）`train.py` を開き、`NUM_CASES_LIMIT` および `NUM_TRIALS` の値を設定し直す。
+`config.yaml` に基本的な設定が集約されている。
 
 ## ローカルテストケースの全実行
 
@@ -55,8 +49,14 @@ make run
 make train
 ```
 
-## オートフォーマッタをかける
+## C++ コードにオートフォーマッタをかける
 
 ```bash
 make format
+```
+
+## Python スクリプトにオートフォーマッタをかける
+
+```bash
+make pyformat
 ```
