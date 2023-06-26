@@ -93,6 +93,9 @@ if __name__ == "__main__":
 
     print("Length: {} / {}".format(len(return_list), len(process_list)))
     print("Elapsed time: {} sec.".format(end_time - start_time))
+    print(
+        "Scoreboard score: {}".format(mean_df["score"] * config["scoreboard_testcases"])
+    )
 
     for column in config["print_columns"]:
         lst = sorted([(x[column], name) for name, x in return_list])
