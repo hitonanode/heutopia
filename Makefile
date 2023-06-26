@@ -8,7 +8,7 @@ format:
 
 pyformat:
 	poetry run black .
-	poetry run flake8 .
+	poetry run ruff --fix .
 	poetry run mypy .
 
 run:

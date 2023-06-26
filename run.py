@@ -1,22 +1,20 @@
 import datetime
-import shutil
+import multiprocessing
 import os
 import pathlib
 import random
+import shutil
 import string
-import time
-import multiprocessing
-from multiprocessing.pool import AsyncResult
 import subprocess
+import time
+from multiprocessing.pool import AsyncResult
 
 import pandas as pd  # type: ignore
 import yaml
 
 import external_solver
 
-
 if __name__ == "__main__":
-
     with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
     print(config)
@@ -80,7 +78,7 @@ if __name__ == "__main__":
     return_list.sort()
     df = pd.DataFrame([x for _, x in return_list])
 
-    mean_df = df.mean().round(4)
+    mean_df = df.mean(numeric_only=True).round(4)
     min_df = df.min()
     max_df = df.max()
     mean_df["input_filename"] = "mean"
@@ -88,7 +86,7 @@ if __name__ == "__main__":
     max_df["input_filename"] = "max"
 
     df_to_save = pd.concat([df, pd.DataFrame([mean_df, min_df, max_df])])
-    df_to_save.to_csv(os.path.join(output_dirname, "summary.csv"), index=False)
+    # df_to_save.to_csv(os.path.join(output_dirname, "summary.csv"), index=False)
     df_to_save.to_excel(os.path.join(output_dirname, "summary.xlsx"), index=False)
 
     print(mean_df.to_json(indent=4))

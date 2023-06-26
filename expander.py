@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
-import re
 import argparse
-from logging import Logger, basicConfig, getLogger
-from os import getenv, environ, pathsep
+import re
+from logging import basicConfig, getLogger
+from os import environ, getenv, pathsep
 from pathlib import Path
-from typing import List, Set
+from typing import List
 
-
-logger = getLogger(__name__)  # type: Logger
+logger = getLogger(__name__)
 
 
 class Expander:
@@ -28,7 +27,7 @@ class Expander:
     def __init__(self, lib_paths: List[Path]):
         self.lib_paths = lib_paths
 
-    included = set()  # type: Set[Path]
+    included: set[Path] = set()
 
     def find_acl(self, acl_name: str) -> Path:
         for lib_path in self.lib_paths:

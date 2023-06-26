@@ -11,7 +11,6 @@ def run(
     solver_args: Optional[list[Union[str, float, int]]],
     show_detail: bool,
 ) -> dict[str, Union[str, float, int]]:
-
     comm = "cat {} | {} {}".format(
         os.path.join(input_dir_abs_path, input_filename),
         solver_abs_path,

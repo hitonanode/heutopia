@@ -5,21 +5,35 @@ description = ""
 authors = ["hitonanode <32937551+hitonanode@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
-numpy = "^1.24.2"
-matplotlib = "^3.6.3"
-pandas = "^1.5.3"
-openpyxl = "^3.1.0"
+python = ">=3.11,<3.12"
+numpy = "^1.25.0"
+matplotlib = "^3.7.1"
+pandas = "^2.0.2"
+openpyxl = "^3.1.2"
 pyyaml = "^6.0"
 online-judge-tools = "^11.5.1"
-optuna = "^3.1.0"
+optuna = "^3.2.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.12.0"
-mypy = "^1.0.0"
-flake8 = "^5.0.4"
-flake8-bugbear = "^22.12.6"
+black = "^23.3.0"
+mypy = "^1.4.1"
+ruff = "^0.0.275"
 types-pyyaml = "^6.0.12.4"
+
+[tool.mypy]
+python_version = "3.11"
+
+[tool.ruff]
+target-version = "py311"
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I001"
+]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
