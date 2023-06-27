@@ -13,6 +13,10 @@ openpyxl = "^3.1.2"
 pyyaml = "^6.0"
 online-judge-tools = "^11.5.1"
 optuna = "^3.2.0"
+google-api-python-client = "^2.90.0"
+gspread = "^5.9.0"
+gspread-dataframe = "^3.3.1"
+pandas-stubs = "^2.0.2.230605"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

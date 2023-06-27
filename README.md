@@ -2,34 +2,14 @@
 
 短期の AtCoder Heuristic Contest で効率的に実験・パラメータ調整を進めるための Python スクリプト等のテンプレートです。
 
-## 想定ディレクトリ構成
-
-```
-./
-├── Makefile
-├── README.md
-├── common.hpp
-├── config.yaml
-├── expander.py
-├── external_solver.py
-├── json_dumper.hpp
-├── main.cpp
-├── poetry.lock
-├── pyproject.toml
-├── run.py
-├── sample_input
-│   └── 0001.in
-└── train.py
-```
-
 ## はじめにやること
 
 ### パッケージのインストール
 
 ```bash
-pyenv install 3.10.9
-pyenv local 3.10.9
-poetry env use 3.10.9
+pyenv install 3.11.4
+pyenv local 3.11.4
+poetry env use 3.11.4
 poetry install
 ```
 
