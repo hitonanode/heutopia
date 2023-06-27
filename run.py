@@ -36,9 +36,9 @@ if __name__ == "__main__":
     pool = multiprocessing.get_context("fork").Pool(processes=config["num_process"])
     num_case_limit = config["num_case_limit"]
 
-    run_id = "{}_{}".format(
+    run_id = "{}{}".format(
         datetime.datetime.now().strftime("%y%m%d%H%M%S"),
-        "".join(random.choice(string.ascii_lowercase) for _ in range(3)),
+        "".join(random.choice(string.ascii_lowercase) for _ in range(2)),
     )
 
     exporters: list[AbstractExporter] = [
