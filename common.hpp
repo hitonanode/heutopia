@@ -153,12 +153,12 @@ const std::string COLOR_RESET = "\033[0m", BRIGHT_GREEN = "\033[1;32m", BRIGHT_R
                   BRIGHT_CYAN = "\033[1;36m", NORMAL_CROSSED = "\033[0;9;37m", RED_BACKGROUND = "\033[1;41m",
                   NORMAL_FAINT = "\033[0;2m";
 #define dbg(x)                                                                                                        \
-    cerr << BRIGHT_CYAN << #x << COLOR_RESET << " = " << (x) << NORMAL_FAINT << " (L" << __LINE__ << ") " << __FILE__ \
-         << COLOR_RESET << endl
+    std::cerr << BRIGHT_CYAN << #x << COLOR_RESET << " = " << (x) << NORMAL_FAINT << " (L" << __LINE__ << ") "        \
+              << __FILE__ << COLOR_RESET << std::endl
 #define dbgif(cond, x)                                                                                                \
-    ((cond) ? cerr << BRIGHT_CYAN << #x << COLOR_RESET << " = " << (x) << NORMAL_FAINT << " (L" << __LINE__ << ") "   \
-                   << __FILE__ << COLOR_RESET << endl                                                                 \
-            : cerr)
+    ((cond) ? std::cerr << BRIGHT_CYAN << #x << COLOR_RESET << " = " << (x) << NORMAL_FAINT << " (L" << __LINE__      \
+                        << ") " << __FILE__ << COLOR_RESET << std::endl                                               \
+            : std::cerr)
 #else
 #define dbg(x) 0
 #define dbgif(cond, x) 0
