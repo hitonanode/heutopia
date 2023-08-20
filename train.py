@@ -43,12 +43,12 @@ if __name__ == "__main__":
         config = yaml.safe_load(f)
     print(config)
 
-    output_dirname = pathlib.Path(
-        "train{}_{}".format(
-            datetime.datetime.now().strftime("%H%M%S"),
-            "".join(random.choice(string.ascii_lowercase) for _ in range(4)),
-        )
-    ).resolve()
+    train_id = "train{}_{}".format(
+        datetime.datetime.now().strftime("%H%M%S"),
+        "".join(random.choice(string.ascii_lowercase) for _ in range(4)),
+    )
+
+    output_dirname = pathlib.Path(train_id).resolve()
 
     os.makedirs(output_dirname)
     shutil.copy2("./main.cpp", output_dirname / "main.cpp.old")
@@ -56,9 +56,19 @@ if __name__ == "__main__":
     solver_path = output_dirname / "solver.out"
     shutil.copy2("./solver.out", solver_path)
 
-    study = optuna.create_study(study_name=str(output_dirname), direction="maximize")
+    study = optuna.create_study(
+        study_name=train_id,
+        direction="maximize",
+        storage="sqlite:///train.db",
+        load_if_exists=True,
+    )
+
+    # study.enqueue_trial({"x": 5,})
+
     study.optimize(objective, n_trials=config["optuna_num_trials"], n_jobs=1)
     print(study.best_params)
 
     with open(output_dirname / "best_parameters.json", "w") as f:
         json.dump(study.best_params, f)
+
+    study.trials_dataframe().to_csv(output_dirname / "trials.csv")

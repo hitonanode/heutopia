@@ -5,3 +5,4 @@ result*/
 train*/
 .python-version
 solver.out
+train.db
