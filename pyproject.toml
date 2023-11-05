@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ahc-template"
-version = "0.3.0"
+version = "0.4.0"
 description = ""
 authors = ["hitonanode <32937551+hitonanode@users.noreply.github.com>"]
 
