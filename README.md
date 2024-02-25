@@ -7,9 +7,8 @@
 ### パッケージのインストール
 
 ```bash
-pyenv install 3.11
-pyenv local 3.11
-poetry env use 3.11
+pyenv install 3.11.8
+poetry env use 3.11.8
 poetry install
 ```
 
