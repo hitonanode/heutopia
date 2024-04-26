@@ -8,6 +8,12 @@ class GoogleSheetsExporterConfig:
 
 
 @dataclass(frozen=True)
+class RunnerConfig:
+    run_comand: str = "cat {INPUT_FILE} | {SOLVER_CMD} 2> {SOLVER_OUTPUT}"
+    # run_command: str = "target/release/tester {SOLVER_CMD} < {INPUT_FILE} > {SOLVER_OUTPUT} 2>&1  | sed 's/\(.*\)/{\"score\": \\1}/'"  # noqa: E501
+
+
+@dataclass(frozen=True)
 class OptunaConfig:
     num_trials: int = 0
 
@@ -27,6 +33,8 @@ class HeutopiaConfig:
     dataset_dir: str
 
     print_columns: list[str]
+
+    runner: RunnerConfig = RunnerConfig()
 
     optuna: OptunaConfig | None = None
 
