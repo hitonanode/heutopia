@@ -57,16 +57,15 @@ if __name__ == "__main__":
 
     print(config)
 
-    train_id = "train{}_{}".format(
+    train_id = config.optuna.train_id or "train{}".format(
         datetime.datetime.now().strftime("%H%M%S"),
-        "".join(random.choice(string.ascii_lowercase) for _ in range(4)),
     )
 
     output_dirname = pathlib.Path(
         config.optuna.result_dir.format(TRAIN_ID=train_id)
     ).resolve()
 
-    os.makedirs(output_dirname)
+    os.makedirs(output_dirname, exist_ok=True)
     shutil.copy2("./main.cpp", output_dirname / "main.cpp.old")
     subprocess.check_output("make", shell=True)
     solver_path = output_dirname / "solver.out"
