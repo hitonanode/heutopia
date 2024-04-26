@@ -15,6 +15,7 @@ class RunnerConfig:
 @dataclass(frozen=True)
 class OptunaConfig:
     num_trials: int = 20
+    train_id: str = ""
     sqlite_db_path: str = "train.db"
     result_dir: str = "{TRAIN_ID}"
 
