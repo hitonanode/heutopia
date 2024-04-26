@@ -1,17 +1,18 @@
 num_process: 4
 num_case_limit: 512
-scoreboard_testcases: 150
-dataset_dir: "sample_input"
+scoreboard_testcases: 50
+dataset_dir: "in"
 
-print_columns:
-  - score
+# print_columns:
+#   - score
 
 runner:
   run_comand: "cat {INPUT_FILE} | {SOLVER_CMD} 2> {SOLVER_OUTPUT}"
   # run_command: "target/release/tester {SOLVER_CMD} < {INPUT_FILE} > {SOLVER_OUTPUT} 2>&1  | sed 's/\(.*\)/{\"score\": \\1}/'"
 
-optuna:
-  num_trials: 20
+# optuna:
+#   num_trials: 20
+#   sqlite_db_path: "train.db"
 
 # Google Sheets に出力したい場合
 # google_sheets:
