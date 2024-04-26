@@ -62,7 +62,9 @@ if __name__ == "__main__":
         "".join(random.choice(string.ascii_lowercase) for _ in range(4)),
     )
 
-    output_dirname = pathlib.Path(train_id).resolve()
+    output_dirname = pathlib.Path(
+        config.optuna.result_dir.format(TRAIN_ID=train_id)
+    ).resolve()
 
     os.makedirs(output_dirname)
     shutil.copy2("./main.cpp", output_dirname / "main.cpp.old")
