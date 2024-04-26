@@ -1,12 +1,9 @@
-#!/usr/bin/env python3
 import datetime
 import json
 import multiprocessing
 import os
 import pathlib
-import random
 import shutil
-import string
 import subprocess
 from multiprocessing.pool import AsyncResult
 
