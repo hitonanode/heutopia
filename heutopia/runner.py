@@ -4,18 +4,23 @@ import subprocess
 import time
 from typing import Optional, Union
 
+from heutopia.config import RunnerConfig
+
 
 def standalone_run(
     solver_abs_path: str,
     input_dir_abs_path: str,
     input_filename: str,
     solver_args: Optional[list[Union[str, float, int]]],
+    runner_config: RunnerConfig,
     show_detail: bool,
 ) -> dict[str, Union[str, float, int]]:
-    comm = "cat {} | {} {}".format(
-        os.path.join(input_dir_abs_path, input_filename),
-        solver_abs_path,
-        " ".join([str(arg) for arg in solver_args]) if solver_args else "",
+    args_str = " ".join([str(arg) for arg in solver_args]) if solver_args else ""
+
+    comm = runner_config.run_comand.format(
+        INPUT_FILE=os.path.join(input_dir_abs_path, input_filename),
+        SOLVER_CMD=solver_abs_path + " " + args_str,
+        SOLVER_OUTPUT="/dev/null",
     )
 
     begin_ns = time.perf_counter_ns()
