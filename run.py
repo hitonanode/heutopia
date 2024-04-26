@@ -86,9 +86,7 @@ if __name__ == "__main__":
                 standalone_run,
                 args=(
                     str(solver_path),
-                    input_filedir,
-                    input_filename,
-                    None,
+                    os.path.join(input_filedir, input_filename),
                     config.runner,
                     True,
                 ),
