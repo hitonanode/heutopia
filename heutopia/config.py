@@ -1,4 +1,4 @@
-from pydantic.dataclasses import dataclass
+from pydantic.dataclasses import Field, dataclass
 
 
 @dataclass(frozen=True)
@@ -10,12 +10,12 @@ class GoogleSheetsExporterConfig:
 @dataclass(frozen=True)
 class RunnerConfig:
     run_comand: str = "cat {INPUT_FILE} | {SOLVER_CMD} 2> {SOLVER_OUTPUT}"
-    # run_command: str = "target/release/tester {SOLVER_CMD} < {INPUT_FILE} > {SOLVER_OUTPUT} 2>&1  | sed 's/\(.*\)/{\"score\": \\1}/'"  # noqa: E501
 
 
 @dataclass(frozen=True)
 class OptunaConfig:
-    num_trials: int = 0
+    num_trials: int = 20
+    sqlite_db_path: str = "train.db"
 
 
 @dataclass(frozen=True)
@@ -32,10 +32,10 @@ class HeutopiaConfig:
     # 入力データディレクトリ
     dataset_dir: str
 
-    print_columns: list[str]
+    print_columns: list[str] = Field(default_factory=lambda: ["score"])
 
     runner: RunnerConfig = RunnerConfig()
 
-    optuna: OptunaConfig | None = None
+    optuna: OptunaConfig = OptunaConfig()
 
     google_sheets: GoogleSheetsExporterConfig | None = None
