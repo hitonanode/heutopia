@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     exporters: list[AbstractExporter] = [
         StdoutExporter(config.print_columns),
-        LocalFileExporter(output_dirpath=os.path.join("result", run_id)),
+        LocalFileExporter(output_dirpath=config.result_dir.format(RUN_ID=run_id)),
     ]
 
     if config.google_sheets:

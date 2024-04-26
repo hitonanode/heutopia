@@ -16,6 +16,7 @@ class RunnerConfig:
 class OptunaConfig:
     num_trials: int = 20
     sqlite_db_path: str = "train.db"
+    result_dir: str = "{TRAIN_ID}"
 
 
 @dataclass(frozen=True)
@@ -31,6 +32,8 @@ class HeutopiaConfig:
 
     # 入力データディレクトリ
     dataset_dir: str
+
+    result_dir: str
 
     print_columns: list[str] = Field(default_factory=lambda: ["score"])
 
