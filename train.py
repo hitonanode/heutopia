@@ -26,10 +26,17 @@ def objective(trial: optuna.trial.Trial):
     dataset_dir = str(pathlib.Path(config.dataset_dir).resolve())
 
     pool = multiprocessing.get_context("fork").Pool(processes=config.num_process)
+
+    solver_command = str(solver_path) + " " + " ".join(map(str, params))
     results: list[AsyncResult] = [
         pool.apply_async(
             standalone_run,
-            args=(str(solver_path), dataset_dir, infile, params, config.runner, False),
+            args=(
+                solver_command,
+                os.path.join(dataset_dir, infile),
+                config.runner,
+                False,
+            ),
         )
         for infile in sorted(os.listdir(dataset_dir))[: config.num_case_limit]
     ]
