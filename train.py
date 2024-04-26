@@ -14,6 +14,7 @@ import optuna
 import yaml
 
 from external_solver import run
+from heutopia.config import HeutopiaConfig
 
 
 def objective(trial: optuna.trial.Trial):
@@ -22,14 +23,14 @@ def objective(trial: optuna.trial.Trial):
     x = trial.suggest_int("x", 4, 12, log=False)
     params = (x,)
 
-    dataset_dir = str(pathlib.Path(config["dataset_dir"]).resolve())
+    dataset_dir = str(pathlib.Path(config.dataset_dir).resolve())
 
-    pool = multiprocessing.get_context("fork").Pool(processes=config["num_process"])
+    pool = multiprocessing.get_context("fork").Pool(processes=config.num_process)
     results: list[AsyncResult] = [
         pool.apply_async(
             run, args=(str(solver_path), dataset_dir, infile, params, False)
         )
-        for infile in sorted(os.listdir(dataset_dir))[: config["num_case_limit"]]
+        for infile in sorted(os.listdir(dataset_dir))[: config.num_case_limit]
     ]
 
     pool.close()
@@ -40,7 +41,12 @@ def objective(trial: optuna.trial.Trial):
 
 if __name__ == "__main__":
     with open("config.yaml", "r") as f:
-        config = yaml.safe_load(f)
+        config_dict = yaml.safe_load(f)
+
+    config = HeutopiaConfig(**config_dict)
+
+    assert config.optuna is not None
+
     print(config)
 
     train_id = "train{}_{}".format(
@@ -65,7 +71,7 @@ if __name__ == "__main__":
 
     # study.enqueue_trial({"x": 5,})
 
-    study.optimize(objective, n_trials=config["optuna_num_trials"], n_jobs=1)
+    study.optimize(objective, n_trials=config.optuna.num_trials, n_jobs=1)
     print(study.best_params)
 
     with open(output_dirname / "best_parameters.json", "w") as f:
