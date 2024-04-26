@@ -6,6 +6,9 @@ dataset_dir: "sample_input"
 print_columns:
   - score
 
+runner:
+  run_comand: "cat {INPUT_FILE} | {SOLVER_CMD} 2> {SOLVER_OUTPUT}"
+
 # optuna:
 #   num_trials: 20
 
