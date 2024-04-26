@@ -6,9 +6,10 @@ dataset_dir: "sample_input"
 print_columns:
   - score
 
-optuna_num_trials: 20
+# optuna:
+#   num_trials: 20
 
 # Google Sheets に出力したい場合
-# google_sheets_exporter:
+# google_sheets:
 #   gcp_sa_path: "path/to/gcp_credential.json"
 #   sheet_key: "***"
