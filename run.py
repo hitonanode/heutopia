@@ -84,7 +84,14 @@ if __name__ == "__main__":
         process_list: list[AsyncResult] = [
             pool.apply_async(
                 standalone_run,
-                args=(solver_path, input_filedir, input_filename, None, True),
+                args=(
+                    str(solver_path),
+                    input_filedir,
+                    input_filename,
+                    None,
+                    config.runner,
+                    True,
+                ),
             )
             for input_filedir, input_filename in input_filesinfo
         ]
