@@ -1,6 +1,6 @@
 import os
 from abc import ABCMeta, abstractmethod
-from typing import Sequence
+from collections.abc import Sequence
 
 import gspread  # type: ignore
 from google.oauth2.service_account import Credentials  # type: ignore
