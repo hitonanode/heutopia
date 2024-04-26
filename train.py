@@ -13,8 +13,8 @@ from multiprocessing.pool import AsyncResult
 import optuna
 import yaml
 
-from external_solver import run
 from heutopia.config import HeutopiaConfig
+from heutopia.runner import standalone_run
 
 
 def objective(trial: optuna.trial.Trial):
@@ -28,7 +28,7 @@ def objective(trial: optuna.trial.Trial):
     pool = multiprocessing.get_context("fork").Pool(processes=config.num_process)
     results: list[AsyncResult] = [
         pool.apply_async(
-            run, args=(str(solver_path), dataset_dir, infile, params, False)
+            standalone_run, args=(str(solver_path), dataset_dir, infile, params, False)
         )
         for infile in sorted(os.listdir(dataset_dir))[: config.num_case_limit]
     ]

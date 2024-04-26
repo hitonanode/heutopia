@@ -5,7 +5,7 @@ import time
 from typing import Optional, Union
 
 
-def run(
+def standalone_run(
     solver_abs_path: str,
     input_dir_abs_path: str,
     input_filename: str,

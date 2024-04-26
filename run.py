@@ -14,7 +14,6 @@ import pandas as pd  # type: ignore
 import yaml
 from pydantic import RootModel
 
-import external_solver
 from heutopia.config import HeutopiaConfig
 from heutopia.cpphelper import expandcpp
 from heutopia.exporter import (
@@ -24,6 +23,7 @@ from heutopia.exporter import (
     LocalFileExporter,
     StdoutExporter,
 )
+from heutopia.runner import standalone_run
 
 if __name__ == "__main__":
     with open("config.yaml", "r") as f:
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
         process_list: list[AsyncResult] = [
             pool.apply_async(
-                external_solver.run,
+                standalone_run,
                 args=(solver_path, input_filedir, input_filename, None, True),
             )
             for input_filedir, input_filename in input_filesinfo
