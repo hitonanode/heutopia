@@ -12,10 +12,10 @@ pyformat:
 	poetry run mypy .
 
 run:
-	poetry run python run.py
+	poetry run python -m heutopia.run
 
 train:
-	poetry run python train.py
+	poetry run python -m heutopia.train
 
 show-studies:
 	poetry run optuna studies  --storage sqlite:///train.db
