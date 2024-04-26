@@ -69,29 +69,29 @@ if __name__ == "__main__":
 
     with tempfile.TemporaryDirectory() as tmpdir:
         subprocess.check_output("make", shell=True)
-        solver_path = (pathlib.Path(tmpdir) / "solver.out").resolve()
+        solver_path = str((pathlib.Path(tmpdir) / "solver.out").resolve())
         shutil.copy2("./solver.out", solver_path)
 
-        input_filesinfo: list[tuple[str, str]] = list()
+        input_files: list[str] = list()
 
         for root, _, files in os.walk(config.dataset_dir):
-            input_filesinfo.extend([(root, f) for f in files])
+            input_files.extend([str((pathlib.Path(root) / f).resolve()) for f in files])
 
-        input_filesinfo = sorted(input_filesinfo)[: config.num_case_limit]
+        input_files = sorted(input_files)[: config.num_case_limit]
 
-        print("Input: {} ({} cases)".format(input_filesinfo, len(input_filesinfo)))
+        print("Input: {} ({} cases)".format(input_files, len(input_files)))
 
         process_list: list[AsyncResult] = [
             pool.apply_async(
                 standalone_run,
                 args=(
-                    str(solver_path),
-                    os.path.join(input_filedir, input_filename),
+                    solver_path,
+                    input_filepath,
                     config.runner,
                     True,
                 ),
             )
-            for input_filedir, input_filename in input_filesinfo
+            for input_filepath in input_files
         ]
         pool.close()
         pool.join()
