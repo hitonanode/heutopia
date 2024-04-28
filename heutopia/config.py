@@ -9,7 +9,7 @@ class GoogleSheetsExporterConfig:
 
 @dataclass(frozen=True)
 class RunnerConfig:
-    run_comand: str = "cat {INPUT_FILE} | {SOLVER_CMD} 2> {SOLVER_OUTPUT}"
+    run_command: str = "cat {INPUT_FILE} | {SOLVER_CMD} 2> {SOLVER_OUTPUT}"
 
 
 @dataclass(frozen=True)
