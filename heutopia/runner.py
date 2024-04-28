@@ -13,10 +13,10 @@ def standalone_run(
     runner_config: RunnerConfig,
     show_detail: bool,
 ) -> dict[str, Union[str, float, int]]:
-    comm = runner_config.run_comand.format(
-        INPUT_FILE=input_fullpath,
-        SOLVER_CMD=solver_command,
-        SOLVER_OUTPUT="/dev/null",
+    comm = (
+        runner_config.run_command.replace("{INPUT_FILE}", input_fullpath)
+        .replace("{SOLVER_CMD}", solver_command)
+        .replace("{SOLVER_OUTPUT}", "/dev/null")
     )
 
     begin_ns = time.perf_counter_ns()

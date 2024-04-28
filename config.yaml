@@ -10,8 +10,8 @@ result_dir: "result/{RUN_ID}"
 #   - score
 
 runner:
-  run_comand: "cat {INPUT_FILE} | {SOLVER_CMD} 2> {SOLVER_OUTPUT}"
-  # run_command: "target/release/tester {SOLVER_CMD} < {INPUT_FILE} > {SOLVER_OUTPUT} 2>&1  | sed 's/\(.*\)/{\"score\": \\1}/'"
+  run_command: "cat {INPUT_FILE} | {SOLVER_CMD} 2> {SOLVER_OUTPUT}"
+  # run_command: "tools/target/release/tester {SOLVER_CMD} < {INPUT_FILE} 2>&1 > {SOLVER_OUTPUT} | sed -e 's/Score = \\([0-9]*\\)/{\"score\": \\1}/'"
 
 optuna:
   num_trials: 20
