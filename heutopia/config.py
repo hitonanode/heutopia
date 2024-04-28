@@ -22,6 +22,9 @@ class OptunaConfig:
 
 @dataclass(frozen=True)
 class HeutopiaConfig:
+    # 並列実行
+    parallel: bool
+
     # 並列実行数
     num_process: int
 
