@@ -1,3 +1,4 @@
+parallel: false
 num_process: 4
 num_case_limit: 512
 scoreboard_testcases: 50

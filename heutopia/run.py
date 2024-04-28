@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 import time
 from multiprocessing.pool import AsyncResult
+from typing import Any
 
 import pandas as pd  # type: ignore
 import yaml
@@ -67,39 +68,41 @@ if __name__ == "__main__":
     for exporter in exporters:
         exporter.dump_src(cpp_src)
 
+    input_files: list[str] = list()
+    for root, _, files in os.walk(config.dataset_dir):
+        input_files.extend([str((pathlib.Path(root) / f).resolve()) for f in files])
+    input_files = sorted(input_files)[: config.num_case_limit]
+    print("Input: {} ({} cases)".format(input_files, len(input_files)))
+
+    result_list: list[Any] = list()
+
     with tempfile.TemporaryDirectory() as tmpdir:
         subprocess.check_output("make", shell=True)
         solver_path = str((pathlib.Path(tmpdir) / "solver.out").resolve())
         shutil.copy2("./solver.out", solver_path)
 
-        input_files: list[str] = list()
+        if config.parallel:
+            process_list: list[AsyncResult] = [
+                pool.apply_async(
+                    standalone_run,
+                    args=(solver_path, input_filepath, config.runner, True),
+                )
+                for input_filepath in input_files
+            ]
+            pool.close()
+            pool.join()
 
-        for root, _, files in os.walk(config.dataset_dir):
-            input_files.extend([str((pathlib.Path(root) / f).resolve()) for f in files])
-
-        input_files = sorted(input_files)[: config.num_case_limit]
-
-        print("Input: {} ({} cases)".format(input_files, len(input_files)))
-
-        process_list: list[AsyncResult] = [
-            pool.apply_async(
-                standalone_run,
-                args=(
-                    solver_path,
-                    input_filepath,
-                    config.runner,
-                    True,
-                ),
-            )
-            for input_filepath in input_files
-        ]
-        pool.close()
-        pool.join()
+            result_list = [x.get() for x in process_list if x.successful()]
+        else:
+            for input_filepath in input_files:
+                result_list.append(
+                    standalone_run(solver_path, input_filepath, config.runner, True)
+                )
 
     end_time = time.perf_counter()
 
     result = BatchResult(
-        df=pd.DataFrame([x.get() for x in process_list if x.successful()])
+        df=pd.DataFrame(result_list)
         .sort_values("input_filename", ascending=True)
         .reset_index(drop=True)
     )
