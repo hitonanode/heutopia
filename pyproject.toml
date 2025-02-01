@@ -1,31 +1,30 @@
 [tool.poetry]
 name = "ahc-template"
-version = "0.4.1"
+version = "0.4.2"
 description = ""
 authors = ["hitonanode <32937551+hitonanode@users.noreply.github.com>"]
 package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
-numpy = "^1.25.0"
-matplotlib = "^3.7.1"
-pandas = "^2.0.2"
-openpyxl = "^3.1.2"
-pyyaml = "^6.0"
+numpy = "^2.2.2"
+matplotlib = "^3.10.0"
+pandas = "^2.2.3"
+openpyxl = "^3.1.5"
+pyyaml = "^6.0.2"
 online-judge-tools = "^11.5.1"
-optuna = "^3.2.0"
-google-api-python-client = "^2.90.0"
-gspread = "^5.9.0"
-gspread-dataframe = "^3.3.1"
+optuna = "^4.2.0"
+google-api-python-client = "^2.160.0"
+gspread = "^6.1.4"
+gspread-dataframe = "^4.0.0"
 pandas-stubs = "^2.0.2.230605"
-plotly = "^5.16.1"
-pydantic = "^2.7.1"
+plotly = "^6.0.0"
+pydantic = "^2.10.6"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
-mypy = "^1.4.1"
-ruff = "^0.0.275"
-types-pyyaml = "^6.0.12.4"
+mypy = "^1.14.1"
+ruff = "^0.9.4"
+types-pyyaml = "^6.0.12.20241230"
 
 [tool.mypy]
 python_version = "3.11"
