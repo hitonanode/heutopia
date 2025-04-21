@@ -7,18 +7,18 @@ format:
 	find ./ -name "*.hpp" -o -name "*.cpp" | xargs clang-format --Werror -i -style=file
 
 pyformat:
-	poetry run ruff format .
-	poetry run ruff check . --fix
-	poetry run mypy .
+	uv run ruff format .
+	uv run ruff check . --fix
+	uv run mypy .
 
 run:
-	poetry run python -m heutopia.run
+	uv run -m heutopia.run
 
 train:
-	poetry run python -m heutopia.train
+	uv run -m heutopia.train
 
 show-studies:
-	poetry run optuna studies  --storage sqlite:///train.db
+	uv run optuna studies  --storage sqlite:///train.db
 
 clean:
 	${RM} solver.out
