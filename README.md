@@ -7,9 +7,7 @@
 ### パッケージのインストール
 
 ```bash
-pyenv install 3.11.8
-poetry env use 3.11.8
-poetry install
+uv sync
 ```
 
 ### システムパラメータの設定
